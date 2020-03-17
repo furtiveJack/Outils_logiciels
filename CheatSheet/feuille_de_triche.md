@@ -1,6 +1,5 @@
 Feuille de triche Python
 =========================
-Dernière mise à jour: 03/03/2020
 
 
 # A ne pas oublier

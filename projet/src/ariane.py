@@ -1,5 +1,3 @@
-
-
 from world import *
 
 world = create_world_from_file("../maps/labyrinthe2.txt")

@@ -30,7 +30,7 @@ Ou alors, fermeture automatique avec la syntaxe :
 
 ```
 with open("path", "r") as file:
-    # Lire le fichier ici
+    # Iterer sur le fichier
 ```
 
 ##  Itérer sur un fichier
