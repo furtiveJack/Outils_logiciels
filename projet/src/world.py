@@ -1,13 +1,14 @@
-from upemtk import *
+import upemtk as upemtk
 from character import *
 from utils import *
 
 
 def create_window():
-    cree_fenetre(HEIGHT, WIDTH)
+    upemtk.cree_fenetre(HEIGHT, WIDTH)
+    upemtk.rectangle(0, 0, WIDTH, HEIGHT, "white", "white")
 
 
-def create_world_from_file(path):
+def create_world_from_file(path: str):
     file = open(path, "r")
     size = int(file.readline())
     grid = [[0 for _ in range(2 * size + 1)] for _ in range(2 * size + 1)]
@@ -22,48 +23,37 @@ def create_world_from_file(path):
     for line in file:
         for char in line:
             if char == "\n":
-                j = 0
+                i = 0
                 continue
-            elif char == "+" or char == "-" or char == "|":
-                grid[j][i] = 1
+            elif char == "-":
+                grid[i][j] = H_WALL
+            elif char == "|":
+                grid[i][j] = V_WALL
+            elif char == "+":
+                grid[i][j] = C_WALL
             elif char == 'A':
-                ariane = (j, i)
+                ariane = (i, j)
             elif char == 'T':
-                thesee = (j, i)
+                thesee = (i, j)
             elif char == 'H':
-                mino_h.append((j, i))
+                mino_h.append((i, j))
             elif char == 'V':
-                mino_v.append((j, i))
+                mino_v.append((i, j))
             elif char == 'P':
-                door = (j, i)
-            else:
-                grid[j][i] = 0
-            j += 1
-        i += 1
+                door = (i, j)
+            i += 1
+        j += 1
     return World(grid, ariane, thesee, mino_h, mino_v, door)
 
 
-def draw_vertical_wall(i, j, scale):
-    print(i, ' ', j, scale)
-    ligne(ORIGIN + i * scale, ORIGIN + j * scale, ORIGIN + (i+1 * scale), ORIGIN + j*scale, couleur="black")
-
-
 class World:
-    """
-    :param level : list[n][n]
-    :param ariane: tuple : pos
-    :param thesee: tuple : pos
-    :param door : tuple : pos
-    :param mino_h : list of tuple (pos)
-    :param mino_v : list of tuple (pos)
-    """
-
-    def __init__(self, level, ariane, thesee, mino_h, mino_v, door):
+    def __init__(self, level: list, ariane: tuple, thesee: tuple, mino_h: list, mino_v: list, door: tuple):
         self.level = level
+        self.n = len(level[0])
         self.ariane = Character(ariane[0], ariane[1], "../media/ariane.png", CharacterType.ARIANE)
         self.thesee = Character(thesee[0], thesee[1], "../media/thesee.png", CharacterType.THESEE)
-        self.mino_h = [Character(mino[0], mino[1], "../media/minoH.png", CharacterType.MINO_H) for mino in mino_h]
-        self.mino_v = [Character(mino[0], mino[1], "../media/minoV.png", CharacterType.MINO_V) for mino in mino_v]
+        self.mino_h = [Character(mino[0], mino[1], "../media/minoH.png", CharacterType.MINO) for mino in mino_h]
+        self.mino_v = [Character(mino[0], mino[1], "../media/minoV.png", CharacterType.MINO) for mino in mino_v]
         self.door = Character(door[0], door[1], "../media/porte.png", CharacterType.DOOR)
 
     def terminal_display(self):
@@ -77,25 +67,20 @@ class World:
         for mino in self.mino_v:
             mino.to_string()
 
-    # def draw_walls(self):
-    #     for i in range(0, n):
-    #         for j in range(0, n):
-    # draw_wall()
-
-    def draw_walls(self, n, scale):
-        for i in range(0, n):
-            for j in range(0, n):
-                if i % 2 == 0 and j % 2 != 0:
-                    draw_vertical_wall(j, i, scale)
-                # elif j % 2 == 0 and i % 2 != 0:
-                #     self.draw_horizontal_wall(i, j, scale)
-                # else:
-                #     self.draw_intersect_wall(i, j, scale)
+    def draw_walls(self, scale):
+        for i in range(0, self.n):
+            for j in range(0, self.n):
+                if self.level[i][j] == V_WALL:
+                    image(ORIGIN + i * scale, ORIGIN + j * scale, "../media/wallV.png")
+                if self.level[i][j] == H_WALL:
+                    image(ORIGIN + i * scale, ORIGIN + j * scale, "../media/wallH.png")
+                if self.level[i][j] == C_WALL:
+                    image(ORIGIN + i * scale, ORIGIN + j * scale, "../media/wallC.png")
 
     def window_display(self):
-        n = len(self.level[0])
-        scale = HEIGHT / n
-        self.draw_walls(n, scale)
+        scale = HEIGHT // self.n
+        print(scale, ' ', self.n)
+        self.draw_walls(scale)
         self.ariane.draw(scale)
         self.thesee.draw(scale)
         self.door.draw(scale)
