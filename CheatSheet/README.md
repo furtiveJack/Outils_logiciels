@@ -1,4 +1,4 @@
-#Sommaire
+# Sommaire
 
 1. [Généralités](general.md)
     * [A ne pas oublier](general.md#a-ne-pas-oublier)
