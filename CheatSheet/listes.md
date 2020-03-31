@@ -1,6 +1,32 @@
 # Les listes
 
-## La fonction `range`
+## Création express
+
+* Initialiser une liste vide : le `_` indique qu'on ne souhaite pas utiliser la variable d'itération
+```python
+>>> l = [0 for _ in range(5)]
+>>> print(l)
+[0, 0, 0, 0, 0]
+```
+
+* Création d'une liste simple
+```python
+>>> l = [i for i in range(1, 10, 2)]
+>>> print(l)
+[1, 3, 5, 7, 9]
+```
+
+* Création d'une liste de listes
+
+```
+>>> l = [[i for i in range(1, 10, 2)] for _ in range(5)]
+>>> print(l)
+[[1, 3, 5, 7, 9], [1, 3, 5, 7, 9], [1, 3, 5, 7, 9], [1, 3, 5, 7, 9], [1, 3, 5, 7, 9]]
+```
+
+## Fonctionnalités
+
+### La fonction `range`
 
 * `range(10)` crée la liste [0,1,...,9]
 * `range(3,10)` crée la liste [3,4,...,9]
@@ -14,16 +40,16 @@ Arguments:
     range( indice_debut,  indice_fin,  pas)
 ```
 
-## La fonction `len`
+### La fonction `len`
 
 Renvoit la taille de la liste
-```
+```python
 >>> l = [0, 1, 2]
 >>> print(len(l))
 3
 ```
 
-## Slice
+### La fonction `slice`
 
 Envoyer une partie de liste (slice operation):
 
@@ -35,7 +61,7 @@ Syntaxe :
 
 Exemple :
 
-```
+```python
 >>> l = [1, 2, 3, 4, 5]`
 
 >>> print(l[0:2])
@@ -51,26 +77,3 @@ Exemple :
 [1, 2, 3]
 ```
 
-## Création express
-
-* Initialiser une liste vide : le `_` indique qu'on ne souhaite pas utiliser la variable d'itération
-```
->>> l = [0 for _ in range(5)]
->>> print(l)
-[0, 0, 0, 0, 0]
-```
-
-* Création d'une liste simple
-```
->>> l = [i for i in range(1, 10, 2)]
->>> print(l)
-[1, 3, 5, 7, 9]
-```
-
-* Création d'une liste de listes
-
-```
->>> l = [[i for i in range(1, 10, 2)] for _ in range(5)]
->>> print(l)
-[[1, 3, 5, 7, 9], [1, 3, 5, 7, 9], [1, 3, 5, 7, 9], [1, 3, 5, 7, 9], [1, 3, 5, 7, 9]]
-```
