@@ -55,7 +55,7 @@ def parse_file(path: string, elements: list):
 
 def display_dict() -> None:
     """
-    Display the value of each value of the dict
+    Display every value of the dict
     """
     for key in ascii_dict:
         print(key, ': ')
