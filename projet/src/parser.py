@@ -1,7 +1,8 @@
 from world import World
+from utils import *
 
 
-def create_from_file(path):
+def create_world_from_file(path: str):
     file = open(path, "r")
     size = int(file.readline())
     grid = [[0 for _ in range(2 * size + 1)] for _ in range(2 * size + 1)]
@@ -10,28 +11,32 @@ def create_from_file(path):
     ariane = (-1, -1)
     thesee = (-1, -1)
     door = (-1, -1)
-    minoH = []
-    minoV = []
+    mino_h = []
+    mino_v = []
 
     for line in file:
         for char in line:
             if char == "\n":
-                j = 0
+                i = 0
                 continue
-            elif char == "+" or char == "-" or char == "|":
-                grid[i][j] = 1
+            elif char == "-":
+                grid[i][j] = H_WALL
+            elif char == "|":
+                grid[i][j] = V_WALL
+            elif char == "+":
+                grid[i][j] = C_WALL
             elif char == 'A':
                 ariane = (i, j)
             elif char == 'T':
                 thesee = (i, j)
             elif char == 'H':
-                minoH.append((i, j))
+                mino_h.append((i, j))
+                grid[i][j] = MINO
             elif char == 'V':
-                minoV.append((i, j))
+                mino_v.append((i, j))
+                grid[i][j] = MINO
             elif char == 'P':
                 door = (i, j)
-            else:
-                grid[i][j] = 0
-            j += 1
-        i += 1
-    return World(grid, ariane, thesee, minoH, minoV, door)
+            i += 1
+        j += 1
+    return World(grid, ariane, thesee, mino_h, mino_v, door)
