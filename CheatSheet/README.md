@@ -1,3 +1,5 @@
+#Sommaire
+
 1. [Généralités](general.md)
     * [A ne pas oublier](general.md#a-ne-pas-oublier)
     * [Structure](general.md#structure)
@@ -26,6 +28,6 @@
     * [Ouverture](fichiers.md#ouverture)
         * [Modes d'ouverture](fichiers.md#modes-douverture)
         * [Types d'ouverture](fichiers.md#types-douverture)
-    * [Fermeture](fichiers.md#)
-    * [Itération](fichiers.md#)    
+    * [Fermeture](fichiers.md#fermeture)
+    * [Itération](fichiers.md#itration)    
     * [Changement d'extension](fichiers.md#changement-dextension)
