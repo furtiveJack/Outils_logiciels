@@ -26,6 +26,29 @@
 
 ## Fonctionnalités
 
+### Ajout
+
+Pour ajouter un élément à la fin d'une liste, on utilise `append`.
+
+```python
+l = [0, 1]
+l.append(3)
+print(l)
+>>> [0, 1, 3]
+```
+
+### Suppression
+
+Pour supprimer le dernier élément,  on utilise `pop`.
+
+```python
+l = [0, 1]
+print(l.pop())
+>>> 1
+print(l)
+>>> [0]
+```
+
 ### La fonction `range`
 
 * `range(10)` crée la liste [0,1,...,9]
