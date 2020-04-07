@@ -3,6 +3,7 @@ import sys
 
 SYMBOL_HEIGHT = 8
 SYMBOL_WIDTH = 15
+LINE_LENGTH = 80
 letters = list(string.ascii_uppercase + string.ascii_lowercase)
 
 numbers = [str(i) for i in range(10)]
@@ -12,6 +13,7 @@ symbols = [',', ';', ':', '!', '?', '.', '/', '"', '\'', '(', '-', ')', '[', '|'
 ascii_dict = {}
 
 
+# INITIALIZATION #######################################################################################################
 def init_dict() -> None:
     """
     Initialize the ascii dict by creating a key entry for all letters/numbers/symbols defined
@@ -22,18 +24,6 @@ def init_dict() -> None:
         ascii_dict[elem] = []
     for elem in symbols:
         ascii_dict[elem] = []
-
-
-def fill_with_spaces(line: string, width: int) -> string:
-    """
-    Fill the line received with (len(line) - width) spaces to the right
-    :param line: the string to fill with spaces
-    :param width: the then we want to match when filling with spaces
-    :return: the new string filled with spaces
-    """
-    size = len(line)
-    spaces_left = width - size
-    return line + (' ' * spaces_left)
 
 
 def parse_file(path: string, elements: list):
@@ -53,14 +43,27 @@ def parse_file(path: string, elements: list):
             line_count += 1
 
 
-def display_dict() -> None:
+def init() -> None:
     """
-    Display every value of the dict
+    Initialize the ascii_dict by reading and parsing files
     """
-    for key in ascii_dict:
-        print(key, ': ')
-        for line in ascii_dict[key]:
-            print(line)
+    init_dict()
+    parse_file("alphabet.txt", letters)
+    parse_file("numbers.txt", numbers)
+    parse_file("symbols.txt", symbols)
+
+
+# ACCESS / FORMATTING ##################################################################################################
+def fill_with_spaces(line: string, width: int) -> string:
+    """
+    Fill the line received with (len(line) - width) spaces to the right
+    :param line: the string to fill with spaces
+    :param width: the width we want to match when filling with spaces
+    :return: the new string filled with spaces
+    """
+    size = len(line)
+    spaces_left = width - size
+    return line + (' ' * spaces_left)
 
 
 def get_data(elem: string) -> list:
@@ -82,31 +85,63 @@ def get_data(elem: string) -> list:
         raise IndexError("Unknown symbol: ", elem)
 
 
-def init() -> None:
+# DISPLAY ##############################################################################################################
+def display_dict() -> None:
     """
-    Initialize the ascii_dict by reading and parsing files
+    Display every value of the dict
     """
-    init_dict()
-    parse_file("alphabet.txt", letters)
-    parse_file("numbers.txt", numbers)
-    parse_file("symbols.txt", symbols)
+    for key in ascii_dict:
+        print(key, ': ')
+        for line in ascii_dict[key]:
+            print(line)
 
 
+# MAIN #################################################################################################################
 if __name__ == '__main__':
     init()
     arg = sys.argv[1]
+    if len(sys.argv) >= 3:
+        line_length = int(sys.argv[2])
+    else:
+        line_length = LINE_LENGTH
     sentence_data = []
     current_line = 0
     current_symbol = 0
+    index = 0
+    next_symbol = 0
     res = ''
     for c in arg:
         sentence_data.append(get_data(c))
-    while current_line != SYMBOL_HEIGHT:
-        if current_symbol == len(arg):
+
+    line_start = 0
+    line_end = len(arg)
+
+    for current_symbol in range(line_start, line_end):
+        if index >= line_length:
             current_line += 1
-            current_symbol = 0
+            next_symbol = current_symbol + 1
+            index = 0
             res += '\n'
+            print(res)
+            if current_line >= SYMBOL_HEIGHT:
+                current_symbol = next_symbol
+                continue
         else:
-            res += sentence_data[current_symbol][current_line]
-            current_symbol += 1
+            e = sentence_data[current_symbol][current_line]
+            index += len(e)
+            res += e
+
+    # while True:
+    #     if index >= line_length:
+    #         current_line += 1
+    #         current_symbol = 0
+    #         index = 0
+    #         res += '\n'
+    #         print(res)
+    #     else:
+    #         e = sentence_data[current_symbol][current_line]
+    #         res += e
+    #         current_symbol += 1
+    #         index += len(e)
+
     print(res)

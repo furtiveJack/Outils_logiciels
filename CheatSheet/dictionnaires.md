@@ -20,5 +20,5 @@
 * Vérifier la présence d'une clé :
 ```python
     if key in dict:
-        print dict[key]
+        print(dict[key])
 ```

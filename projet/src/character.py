@@ -30,5 +30,9 @@ class Character:
         if direction == Direction.RIGHT:
             self.x += 2
 
+    def teleport(self, position: tuple) -> None:
+        self.x = position[0]
+        self.y = position[1]
+
     def get_position(self) -> tuple:
         return self.x, self.y

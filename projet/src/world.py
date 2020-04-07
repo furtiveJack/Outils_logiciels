@@ -1,4 +1,3 @@
-import upemtk as upemtk
 from character import *
 from utils import *
 
@@ -14,9 +13,38 @@ class World:
         self.door = Character(door[0], door[1], "../media/porte.png", CharacterType.DOOR)
         self.ariane_found = False
         self.door_found = False
+        self.history = []
 
-    def move_ariane(self, direction: Direction) -> None:
-        return self.ariane.move(direction)
+    def save_game_state(self):
+        state = [self.ariane.get_position(), self.thesee.get_position(), [mino.get_position() for mino in self.mino_h],
+                 [mino.get_position() for mino in self.mino_v]]
+        self.history.append(state)
+
+    def cancel_move(self):
+        if len(self.history) < 2:
+            return
+        self.history.pop()              # Removing last player move
+        state = self.history.pop()      # Getting the move before
+        self.ariane.teleport(state[0])
+        self.thesee.teleport(state[1])
+        for i in range(len(self.mino_h)):
+            self.mino_h[i].teleport(state[2][i])
+        for i in range(len(self.mino_v)):
+            self.mino_v[i].teleport(state[3][i])
+
+    def move_all(self, ariane_dir: Direction):
+        self.move_ariane(ariane_dir)
+        self.move_thesee()
+        for mino in self.mino_v:
+            self.move_mino(mino)
+        for mino in self.mino_h:
+            self.move_mino(mino)
+
+    def move_ariane(self, direction: Direction) -> bool:
+        if (direction is None) or (not self.valid_direction(self.ariane, direction)):
+            return False
+        self.ariane.move(direction)
+        return True
 
     def move_thesee(self) -> None:
         direction = self.__compute_thesee_dir__()
@@ -41,8 +69,8 @@ class World:
         return self.ariane_found or self.door_found
 
     def valid_direction(self, char: Character, direction: Direction) -> bool:
-        x, y = char.get_position()
-        x2, y2 = x, y
+        x, y = char.get_position()  # Get current position
+        x2, y2 = x, y  # Destination position depending on the character direction
         if direction == Direction.UP:
             if y == 0:
                 return False
@@ -68,6 +96,22 @@ class World:
         else:
             return self.level[x][y] == 0
 
+    def to_configuration(self) -> tuple:
+        mino_h = [mino.get_position() for mino in self.mino_h]
+        mino_v = [mino.get_position() for mino in self.mino_v]
+        conf = (self.ariane.get_position(), self.thesee.get_position(), self.ariane_found, tuple(mino_h),
+                tuple(mino_v))
+        return conf
+
+    def load_configuration(self, conf: tuple) -> None:
+        self.ariane.teleport(conf[0])
+        self.thesee.teleport(conf[1])
+        self.ariane_found = conf[2]
+        for i in range(len(self.mino_h)):
+            self.mino_h[i].teleport(conf[3][i])
+        for i in range(len(self.mino_v)):
+            self.mino_v[i].teleport(conf[4][i])
+
     def __ariane_found__(self, mino: Character) -> bool:
         xm, ym = mino.get_position()
         xa, ya = self.ariane.get_position()
@@ -84,7 +128,7 @@ class World:
     def __check_mino_direction__(self, char: Character, direction: Direction, x: int, y: int, x2: int, y2: int) -> bool:
         if char.type == CharacterType.MINO_V:
             if self.level[x][y] == 0 and self.__v_aligned__(char):
-                if self.__ariane_found__(char) or (direction != Direction.LEFT and direction != Direction.RIGHT)\
+                if self.__ariane_found__(char) or (direction != Direction.LEFT and direction != Direction.RIGHT) \
                         or self.level[x2][y2] != 0:
                     return False
                 return True
@@ -129,12 +173,12 @@ class World:
         x, y = mino.get_position()
         self.level[x][y] = value
 
-    def __h_aligned__(self, mino: Character) -> bool:  # for minoH
+    def __h_aligned__(self, mino: Character) -> bool:
         xm, ym = mino.get_position()
         xa, ya = self.ariane.get_position()
         return True if (xa == xm) else False
 
-    def __v_aligned__(self, mino: Character) -> bool:  # for minoV
+    def __v_aligned__(self, mino: Character) -> bool:
         xm, ym = mino.get_position()
         xa, ya = self.ariane.get_position()
         return True if (ya == ym) else False
