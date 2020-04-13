@@ -1,5 +1,5 @@
-from world import World
-from utils import *
+from src.world import World
+from src.utils import *
 
 
 def create_world_from_file(path: str):
@@ -17,7 +17,7 @@ def create_world_from_file(path: str):
     for line in file:
         for char in line:
             if char == "\n":
-                i = 0
+                j = 0
                 continue
             elif char == "-":
                 grid[i][j] = H_WALL
@@ -37,6 +37,6 @@ def create_world_from_file(path: str):
                 grid[i][j] = MINO
             elif char == 'P':
                 door = (i, j)
-            i += 1
-        j += 1
+            j += 1
+        i += 1
     return World(grid, ariane, thesee, mino_h, mino_v, door)

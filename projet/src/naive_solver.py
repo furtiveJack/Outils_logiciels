@@ -1,9 +1,8 @@
 import time
 
-from world import *
-from utils import *
-import view as view
-from parser import *
+from src.world import move_minos
+import src.view as view
+from src.parser import *
 
 
 class NaiveSolver:
@@ -11,53 +10,51 @@ class NaiveSolver:
         self.visited = set()
         self.solution = []
 
-    def solve(self, world: World) -> bool:
-        print("start")
-        conf = world.to_configuration()
-        print(conf)
-        if world.ariane.get_position() == world.door.get_position():
-            print("ariane won")
+    def solve(self, world: World, conf: tuple, display=False) -> bool:
+        if world.game_won():
             return True
-        if world.ariane_found:
-            print("ariane found on conf ", conf)
+        if world.game_lost():
             return False
         self.visited.add(conf)
-        # print("visited : ", self.visited)
         for direction in Direction:
             world.load_configuration(conf)
             if not world.valid_direction(world.ariane, direction):
                 continue
             else:
                 world.move_all(direction)
-                view.display(world)
-                time.sleep(0.3)
+                if display:
+                    view.display(world)
+                    time.sleep(0.05)
                 updated_conf = world.to_configuration()
-                print("new conf: ", updated_conf)
             if updated_conf in self.visited:
-                print("already visited")
                 continue
-            if self.solve(world):
+            if self.solve(world, updated_conf, display):
                 self.solution.append(direction)
                 return True
             else:
-                print("next dir")
                 continue
         return False
 
+    def play_game(self, world: World) -> None:
+        ariane_inputs = self.solution[::-1]
+        for input_dir in ariane_inputs:
+            world.move_ariane(input_dir)
+            world.move_thesee()
+            view.display(world)
+            if world.game_lost() or world.game_won():
+                return
+            move_minos(world, view)
+            time.sleep(0.3)
 
-if __name__ == '__main__':
-    solver = NaiveSolver()
-    world = create_world_from_file("../maps/small/small1.txt")
-    view.create_window(world)
-    view.terminal_display(world)
-    view.display(world)
-    print(solver.solve(world))
-    for direc in solver.solution[::-1]:
-        if direc == Direction.UP:
-            print("Up - ", end="")
-        if direc == Direction.DOWN:
-            print("Down - ", end="")
-        if direc == Direction.LEFT:
-            print("Left - ", end="")
-        if direc == Direction.RIGHT:
-            print("Right - ", end="")
+    def display_solution(self):
+        for direction in self.solution[::-1]:
+            if direction == Direction.UP:
+                print("Up - ", end="")
+            if direction == Direction.DOWN:
+                print("Down - ", end="")
+            if direction == Direction.LEFT:
+                print("Left - ", end="")
+            if direction == Direction.RIGHT:
+                print("Right - ", end="")
+        print("")
+

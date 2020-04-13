@@ -1,6 +1,6 @@
 import upemtk as upemtk
-from world import World
-from utils import *
+from src.world import World
+from src.utils import *
 
 
 def create_window(world: World):
@@ -22,8 +22,19 @@ def display(world: World) -> None:
 
 
 def terminal_display(world: World) -> None:
-    for line in world.level:
-        print(line)
+    for i in range(len(world.level[0])):
+        for j in range(len(world.level[i])):
+            if world.level[i][j] == C_WALL:
+                print("+", end="")
+            if world.level[i][j] == H_WALL:
+                print("-", end="")
+            if world.level[i][j] == V_WALL:
+                print("|", end="")
+            if world.level[i][j] == NONE:
+                print(" ", end="")
+            if world.level[i][j] == MINO:
+                print("M", end="")
+        print("")
     world.ariane.to_string()
     world.thesee.to_string()
     world.door.to_string()
@@ -37,9 +48,9 @@ def draw_walls(world):
     scale = HEIGHT // world.n
     for i in range(0, world.n):
         for j in range(0, world.n):
-            if world.level[i][j] == V_WALL:
-                upemtk.image(ORIGIN + i * scale, ORIGIN + j * scale, "../media/wallV.png")
-            if world.level[i][j] == H_WALL:
-                upemtk.image(ORIGIN + i * scale, ORIGIN + j * scale, "../media/wallH.png")
-            if world.level[i][j] == C_WALL:
-                upemtk.image(ORIGIN + i * scale, ORIGIN + j * scale, "../media/wallC.png")
+            if world.level[j][i] == V_WALL:
+                upemtk.image(ORIGIN + i * scale, ORIGIN + j * scale, "media/wallV.png")
+            if world.level[j][i] == H_WALL:
+                upemtk.image(ORIGIN + i * scale, ORIGIN + j * scale, "media/wallH.png")
+            if world.level[j][i] == C_WALL:
+                upemtk.image(ORIGIN + i * scale, ORIGIN + j * scale, "media/wallC.png")

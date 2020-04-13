@@ -1,5 +1,5 @@
 from upemtk import *
-from utils import *
+from src.utils import *
 
 
 class Character:
