@@ -71,7 +71,7 @@ class World:
 
     def move_all(self, ariane_dir: Direction) -> bool:
         """
-        Move all the characters of the wall regarding to Ariane direction.
+        Move all the characters of the world in relation to Ariane direction.
         :param ariane_dir: the direction in which Ariane should move.
         :return: True if the direction is valid regarding the current position of Ariane, False otherwise.
         """
