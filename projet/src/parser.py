@@ -2,7 +2,12 @@ from src.world import World
 from src.utils import *
 
 
-def create_world_from_file(path: str):
+def create_world_from_file(path: str) -> World:
+    """
+    Parse the file provided and generate a world that represents the content of this file.
+    :param path: path of the file to parse.
+    :return: a world representing the content of the file (walls, characters).
+    """
     file = open(path, "r")
     size = int(file.readline())
     grid = [[0 for _ in range(2 * size + 1)] for _ in range(2 * size + 1)]
