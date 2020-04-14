@@ -61,9 +61,13 @@ class World:
         self.ariane.teleport(state[0])
         self.thesee.teleport(state[1])
         for i in range(len(self.mino_v)):
+            self.__update_mino_in_level__(self.mino_v[i], NONE)
             self.mino_v[i].teleport(state[2][i])
+            self.__update_mino_in_level__(self.mino_v[i], MINO)
         for i in range(len(self.mino_h)):
+            self.__update_mino_in_level__(self.mino_h[i], NONE)
             self.mino_h[i].teleport(state[3][i])
+            self.__update_mino_in_level__(self.mino_h[i], MINO)
 
     def move_all(self, ariane_dir: Direction) -> bool:
         """
