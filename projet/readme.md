@@ -3,6 +3,8 @@
 The purpose of this project is to implement a "puzzle" game with an automatic solution finding algorithm 
 (automatic solver).
 
+-----------------------------------------------------------------------------------------------------------------
+
 ## How to play
 
 ### Overview :
@@ -20,6 +22,8 @@ The purpose of this project is to implement a "puzzle" game with an automatic so
     * They are all located in the __maps__ folder.
 
 * The rules of the game are specified in [project.pdf](project.pdf) (_in french_).
+
+-----------------------------------------------------------------------------------------------------------------
 
 ### Classic game
 
@@ -39,7 +43,7 @@ To move (cell by cell) Ariane, you need to use the arrow keys.
 
 You can cancel your last move by pressing 'c' on your keyboard.
 
-
+-----------------------------------------------------------------------------------------------------------------
 ### Solvers
 
 To start one of the solver, use the following command :
@@ -59,8 +63,7 @@ Once the computation is done, the algorithm returns a list of moves that lead to
 initial configuration of the game.
 
 You can use them during one of your own game on this map, or you can let the solver play the
-game for you using this list of moves, so you just need to sit here, and enjoy the story 
-of Ariane and Thesee (and the Minotaurs).
+game for you using this list of moves.
 
 
 #### Naive Solver
@@ -75,13 +78,13 @@ To start the naive solver :
 python3 ariane.py path_of_the_map naive [-v]
 ```
 
-This solver returns a solution that works, but that may be longer than needed.
+This solver returns a solution that works, but that may be longer (in terms of number of moves) than needed.
 
 #### Minimal Solver
 
 The minimal solver uses a breadth-first search-algorithm.
 
-It compute all the sequences of possible moves ordered by number of moves, until it
+It compute all the sequences of possible moves ordered by length, until it
 finds a winning configuration.
 
 To start the minimal solver :
@@ -90,6 +93,8 @@ python3 ariane.py path_of_the_map minimal [-v]
 ```
 
 This solver returns a solution that is minimal in relation to number of moves.
+
+-----------------------------------------------------------------------------------------------------------------
 
 ### Benchmark
 
@@ -104,7 +109,7 @@ To be usable by the benchmark, your maps must respect this naming convention :
 ```shell script
 defiXX.txt
 ```
-where 'XX' is (obvsiously) not an id for another map in this directory.
+where 'XX' is not an id for another map in this directory.
 
 To run a benchmark :
 ```shell script
@@ -115,8 +120,8 @@ You should get a result that looks like that :
 
 | File name         | DFS results               |           BFS results             |
 |:-----------------:|:--------------------------|:----------------------------------|
-| defi00.txt 	    | 208 moves	(58ms)	        |	    36 moves	(84ms)      |
-| defi01.txt 	    | No solution	(100ms) 	|	 	No solution	(71ms)  |
+| defi00.txt 	    | 208 moves	(58ms)	        |	    36 moves	(84ms)          |
+| defi01.txt 	    | No solution	(100ms) 	|	 	No solution	(71ms)          |
 | defi02.txt 	    | 177 moves	(26ms)	        |	 	93 moves	(150ms)         |
 | defi03.txt 	    | 265 moves	(43ms)          |		41 moves	(170ms)         |
 | defi04.txt 	    | 288 moves	(180ms)         |		102 moves	(271ms)         |
@@ -130,9 +135,7 @@ You should get a result that looks like that :
 | defi12.txt 	    | 94 moves	(34ms)          |       48 moves	(189ms)         |
 
 You can see that the number of moves provided by the minimal solver is really smaller
-than for the naive solver. 
-But the naive solver is way much quicker to compute a solution.
+than for the naive solver, but it takes more time to compute.
 
 So if you just want to know if the game has a solution, you should use the DFS algorithm.
-
 If you want to know if it has a solution, AND play this solution, you should use the BFS algorithm.
