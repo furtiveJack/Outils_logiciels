@@ -98,38 +98,57 @@ def display_dict() -> None:
 
 # MAIN #################################################################################################################
 if __name__ == '__main__':
+    # Marche seulement si la chaine donnée se représente en ascii sur une seule ligne du terminal
     init()
     arg = sys.argv[1]
-    if len(sys.argv) >= 3:
-        line_length = int(sys.argv[2])
-    else:
-        line_length = LINE_LENGTH
     sentence_data = []
     current_line = 0
     current_symbol = 0
-    index = 0
-    next_symbol = 0
     res = ''
     for c in arg:
         sentence_data.append(get_data(c))
-
-    line_start = 0
-    line_end = len(arg)
-
-    for current_symbol in range(line_start, line_end):
-        if index >= line_length:
+    while current_line != SYMBOL_HEIGHT:
+        if current_symbol == len(arg):
             current_line += 1
-            next_symbol = current_symbol + 1
-            index = 0
+            current_symbol = 0
             res += '\n'
-            print(res)
-            if current_line >= SYMBOL_HEIGHT:
-                current_symbol = next_symbol
-                continue
         else:
-            e = sentence_data[current_symbol][current_line]
-            index += len(e)
-            res += e
+            res += sentence_data[current_symbol][current_line]
+            current_symbol += 1
+    print(res)
+# Tentatives pour spliter la chaine ascii en plusieurs lignes
+    # init()
+    # arg = sys.argv[1]
+    # if len(sys.argv) >= 3:
+    #     line_length = int(sys.argv[2])
+    # else:
+    #     line_length = LINE_LENGTH
+    # sentence_data = []
+    # current_line = 0
+    # current_symbol = 0
+    # index = 0
+    # next_symbol = 0
+    # res = ''
+    # for c in arg:
+    #     sentence_data.append(get_data(c))
+    #
+    # line_start = 0
+    # line_end = len(arg)
+    #
+    # for current_symbol in range(line_start, line_end):
+    #     if index >= line_length:
+    #         current_line += 1
+    #         next_symbol = current_symbol + 1
+    #         index = 0
+    #         res += '\n'
+    #         print(res)
+    #         if current_line >= SYMBOL_HEIGHT:
+    #             current_symbol = next_symbol
+    #             continue
+    #     else:
+    #         e = sentence_data[current_symbol][current_line]
+    #         index += len(e)
+    #         res += e
 
     # while True:
     #     if index >= line_length:
@@ -144,4 +163,3 @@ if __name__ == '__main__':
     #         current_symbol += 1
     #         index += len(e)
 
-    print(res)
