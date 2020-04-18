@@ -44,7 +44,7 @@ class MinimalSolver:
                 if updated not in self.visited:
                     self.visited.add(updated)
                     # Constructing a new list containing all the directions that lead to the previous configuration,
-                    # and add the direction that leads to the updated one
+                    # and add the direction that leads to the new configuration
                     updated_dir_list = dir_list + [dir_to_string(direction)]
                     to_treat.append((updated, updated_dir_list))
                 world.load_configuration(current)

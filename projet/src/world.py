@@ -164,8 +164,8 @@ class World:
         if direction == Direction.UP:
             if y == 0:
                 return False
-            y = y - 1
-            y2 = y2 - 2
+            y = y - 1       # index to check walls
+            y2 = y2 - 2     # index to check other characters
         if direction == Direction.RIGHT:
             if x == self.n - 1:
                 return False
@@ -196,8 +196,8 @@ class World:
             - thesee position : tuple
             - ariane_found : bool
             - door_found : bool
-            - mino_v positions : list of tuples
-            - mino_h positions : list of tuples
+            - mino_v positions : tuple of tuples
+            - mino_h positions : tuple of tuples
         """
         mino_h = [mino.get_position() for mino in self.mino_h]
         mino_v = [mino.get_position() for mino in self.mino_v]
