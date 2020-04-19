@@ -43,6 +43,25 @@ To move (cell by cell) Ariane, you need to use the arrow keys.
 
 You can cancel your last move by pressing 'c' on your keyboard.
 
+##### Create saves
+
+You can save the current configuration of the game into a file,
+and reload it later. To create a save, just press the 's' button while playing.
+
+##### Load a save
+
+When you launch the game with a given map, the game will search for a save matching 
+the given map, and if it exists, you can choose to use it.
+
+This means you can only create one save per map.
+
+##### Clue feature
+
+For each configuration of the game (_ie: after each one of your moves_), a solver
+checks if you can still win regarding the current configuration. 
+
+If not, the game is consider as lost. 
+
 -----------------------------------------------------------------------------------------------------------------
 ### Solvers
 
