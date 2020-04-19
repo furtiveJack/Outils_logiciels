@@ -25,6 +25,19 @@ def display_result(world: World):
         return
 
 
+def still_remaining_options(world: World) -> bool:
+    solver = NaiveSolver()
+    current_conf = world.to_configuration()
+    clue = solver.solve(world)
+    world.load_configuration(current_conf)
+    if not clue:
+        upemtk.texte(HEIGHT // 2, WIDTH // 2, "NO MORE OPTION, GAME LOST :(", couleur="red", ancrage="center",
+                     taille=40)
+        upemtk.attend_clic_gauche()
+        return False
+    return True
+
+
 def player_game(lab_path: str) -> None:
     """
     Start a new game where the player controls Ariane. The world is loaded using the file whose path has been provided.
@@ -38,6 +51,9 @@ def player_game(lab_path: str) -> None:
     view.display(world)
     world.save_game_state()
     while True:
+        # If the player has no more chance of winning, the game is stopped
+        if not still_remaining_options(world):
+            break
         ev = upemtk.attend_ev()
         tev = upemtk.type_ev(ev)
         if tev == 'Quitte':

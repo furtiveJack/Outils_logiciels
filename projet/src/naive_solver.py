@@ -9,11 +9,12 @@ class NaiveSolver:
     """
     This class represents a solver that search for a solution in the game
     """
+
     def __init__(self):
         self.visited = set()
         self.solution = []
 
-    def solve(self, world: World, display = False) -> bool:
+    def solve(self, world: World, display=False) -> bool:
         """
         Solve the world provided, using a Depth-First Search algorithm.
         From the initial configuration of the world, this methods search for a winning configuration by exploring all
@@ -75,4 +76,3 @@ class NaiveSolver:
         :return: None, but display the list containing all the moves Ariane should do to win the game
         """
         print(self.solution)
-
