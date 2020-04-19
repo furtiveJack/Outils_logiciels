@@ -50,7 +50,11 @@ class World:
         self.save_game_state()
         m_view.display(self)
 
-    def create_save(self):
+    def create_save(self) -> None:
+        """
+        Save the current game configuration into a file.
+        :return: None
+        """
         conf = self.to_configuration()
         filename = "saves/save" + self.map_name
         with open(filename, "w") as save_file:
@@ -69,6 +73,10 @@ class World:
         print("Save created!")
 
     def load_save(self) -> bool:
+        """
+        Load the save associated to the current map and return True. If no such save exists, return False
+        :return: True if successful load of the save, False otherwise.
+        """
         filename = "saves/save" + self.map_name
         try:
             with open(filename, "r") as save_file:
