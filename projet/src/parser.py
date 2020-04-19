@@ -44,4 +44,5 @@ def create_world_from_file(path: str) -> World:
                 door = (i, j)
             j += 1
         i += 1
-    return World(grid, ariane, thesee, mino_h, mino_v, door)
+    map_name = path.split("/")[1]
+    return World(grid, ariane, thesee, mino_h, mino_v, door, map_name)
