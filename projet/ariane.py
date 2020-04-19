@@ -46,10 +46,11 @@ def player_game(lab_path: str) -> None:
     """
     canceled_last_move = False
     world = create_world_from_file(lab_path)
-    view.create_window(world)
-    view.terminal_display(world)
-    view.display(world)
     world.save_game_state()
+    if world.load_save():
+        print("Save has been loaded!")
+    view.create_window(world)
+    view.display(world)
     while True:
         # If the player has no more chance of winning, the game is stopped
         if not still_remaining_options(world):
@@ -67,6 +68,8 @@ def player_game(lab_path: str) -> None:
                     continue
             else:
                 canceled_last_move = False
+            if key == 's':
+                world.create_save()
             direction = get_dir_from_string(key)
             if not world.move_ariane(direction):
                 continue
@@ -76,6 +79,8 @@ def player_game(lab_path: str) -> None:
                 display_result(world)
                 break
             world.move_minos(view)
+            # time.sleep(1)
+            view.terminal_display(world)
             if world.game_lost():
                 display_result(world)
                 break

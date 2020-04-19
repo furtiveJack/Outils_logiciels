@@ -7,7 +7,8 @@ class World:
     A class to represent the game.
     A game is composed of walls and characters.
     """
-    def __init__(self, level: list, ariane: tuple, thesee: tuple, mino_h: list, mino_v: list, door: tuple):
+    def __init__(self, level: list, ariane: tuple, thesee: tuple, mino_h: list, mino_v: list, door: tuple
+                 , map_name: str):
         """
         Initialize a new member of this class.
         :param level: a matrix representing the positions of walls and minotaurs.
@@ -18,6 +19,7 @@ class World:
         :param door:  a tuple(int, int) representing the initial position of the Door
         """
         self.level = level
+        self.map_name = map_name
         self.n = len(level[0])
         self.ariane = Character(ariane[1], ariane[0], "media/ariane.png", CharacterType.ARIANE)
         self.thesee = Character(thesee[1], thesee[0], "media/thesee.png", CharacterType.THESEE)
@@ -47,6 +49,61 @@ class World:
         self.__cancel_move__()
         self.save_game_state()
         m_view.display(self)
+
+    def create_save(self):
+        conf = self.to_configuration()
+        filename = "saves/save" + self.map_name
+        with open(filename, "w") as save_file:
+            print(conf)
+            save = ""
+            save += str(conf[0][0]) + " " + str(conf[0][1]) + "\n"
+            save += str(conf[1][0]) + " " + str(conf[1][1]) + "\n"
+            save += str(conf[2]) + "\n"
+            save += str(conf[3]) + "\n"
+            save += "MINOV\n"
+            for mino in conf[4]:
+                save += str(mino[0]) + " " + str(mino[1]) + "\n"
+            save += "MINOH\n"
+            for mino in conf[5]:
+                save += str(mino[0]) + " " + str(mino[1]) + "\n"
+            save_file.write(save)
+        print("Save created!")
+
+    def load_save(self) -> bool:
+        filename = "saves/save" + self.map_name
+        try:
+            with open(filename, "r") as save_file:
+                print("A save exists for this map ! Do you want to load it ? [y/n]")
+                load = input()
+                if str(load).lower() != "y":
+                    print("Not loading existing save")
+                    return False
+                ariane = save_file.readline().rstrip().split(" ")
+                ariane = (int(ariane[0]), int(ariane[1]))
+                thesee = save_file.readline().rstrip().split(" ")
+                thesee = (int(thesee[0]), int(thesee[1]))
+                ariane_found = (save_file.readline().rstrip() == "True")
+                door_found = (save_file.readline().rstrip() == "True")
+                save_file.readline()    # Reading "MINOV"
+                mino_v = []
+                mino_h = []
+                mino_pos = save_file.readline().rstrip().split(" ")  # Read mino pos
+                while True:
+                    try:
+                        mino_v.append((int(mino_pos[0]), int(mino_pos[1])))
+                        mino_pos = save_file.readline().rstrip().split(" ")
+                    except (ValueError, IndexError):
+                        break   # Break when we read "MINOH"
+                mino_pos = save_file.readline().rstrip().split(" ")  # Read mino pos
+                while mino_pos[0] != "":
+                    mino_h.append((int(mino_pos[0]), int(mino_pos[1])))
+                    mino_pos = save_file.readline().rstrip().split(" ")
+                conf = (ariane, thesee, ariane_found, door_found, tuple(mino_v), tuple(mino_h))
+                self.load_configuration(conf)
+                return True
+        except (OSError, IOError):
+            print("There is no save file for this map!")
+            return False
 
     def __cancel_move__(self) -> None:
         """
