@@ -54,7 +54,6 @@ class World:
         conf = self.to_configuration()
         filename = "saves/save" + self.map_name
         with open(filename, "w") as save_file:
-            print(conf)
             save = ""
             save += str(conf[0][0]) + " " + str(conf[0][1]) + "\n"
             save += str(conf[1][0]) + " " + str(conf[1][1]) + "\n"
