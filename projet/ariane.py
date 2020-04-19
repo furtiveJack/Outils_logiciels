@@ -79,8 +79,6 @@ def player_game(lab_path: str) -> None:
                 display_result(world)
                 break
             world.move_minos(view)
-            # time.sleep(1)
-            view.terminal_display(world)
             if world.game_lost():
                 display_result(world)
                 break
